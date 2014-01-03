@@ -4,6 +4,7 @@ namespace :load do
     set :unicorn_config_path, -> { File.join(current_path, "config", "unicorn", "#{fetch(:rails_env)}.rb") }
     set :unicorn_restart_sleep_time, 3
     set :unicorn_roles, -> { :app }
+    set :unicorn_address, -> { nil }
   end
 end
 
@@ -16,7 +17,11 @@ namespace :unicorn do
           if test("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}")
             info "unicorn is running..."
           else
-            execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:rails_env), "-D"
+            if fetch(:unicorn_address).nil?
+              execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:rails_env), "-D"
+            else
+              execute :bundle, "exec unicorn", "-l", fetch(:unicorn_address), "-c", fetch(:unicorn_config_path), "-E", fetch(:rails_env), "-D"
+            end
           end
         end
       end

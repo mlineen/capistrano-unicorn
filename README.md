@@ -30,6 +30,10 @@ You can override the defaults by `set :unicorn_example, value` in the `config/de
 
     Roles to run unicorn commands on. Defaults to :app
 
+- `:unicorn_address`
+
+    Address where unicorn listen to. May be in the form of HOST:PORT or PATH, HOST:PORT is taken to mean a TCP socket and PATH is meant to be a path to a UNIX domain socket. Defaults to nil (this option is not used by default.)
+
 ### Setup
 
 Add the library to your `Gemfile`:
