@@ -30,6 +30,10 @@ You can override the defaults by `set :unicorn_example, value` in the `config/de
 
     Roles to run unicorn commands on. Defaults to :app
 
+- `:unicorn_port`
+
+    Port where unicorn is bound. Defaults to 8080
+
 ### Setup
 
 Add the library to your `Gemfile`:
