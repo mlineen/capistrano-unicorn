@@ -24,10 +24,6 @@ You can override the defaults by `set :unicorn_example, value` in the `config/de
 
     Assumes that your Unicorn configuration will be located in `config/unicorn/RAILS_ENV.rb`
 
-- `:unicorn_restart_sleep_time`
-
-    When performing zero-downtime deployment via the `unicorn:restart` task, send the USR2 signal, sleep for this many seconds (defaults to 3), then send the QUIT signal
-
 - `:unicorn_roles`
 
     Roles to run unicorn commands on. Defaults to :app
