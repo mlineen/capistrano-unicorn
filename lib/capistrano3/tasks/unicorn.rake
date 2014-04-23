@@ -2,7 +2,6 @@ namespace :load do
   task :defaults do
     set :unicorn_pid, -> { File.join(current_path, "tmp", "pids", "unicorn.pid") }
     set :unicorn_config_path, -> { File.join(current_path, "config", "unicorn", "#{fetch(:rails_env)}.rb") }
-    set :unicorn_restart_sleep_time, 3
     set :unicorn_roles, -> { :app }
     set :unicorn_options, -> { "" }
     set :unicorn_rack_env, -> { fetch(:rails_env) == "development" ? "development" : "deployment" }
@@ -63,10 +62,6 @@ namespace :unicorn do
       within current_path do
         info "unicorn restarting..."
         execute :kill, "-s USR2", pid
-        execute :sleep, fetch(:unicorn_restart_sleep_time)
-        if test("[ -e #{fetch(:unicorn_pid)}.oldbin ]")
-          execute :kill, "-s QUIT", pid_oldbin
-        end
       end
     end
   end
