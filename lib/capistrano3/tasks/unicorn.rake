@@ -1,3 +1,7 @@
+require 'capistrano3/unicorn/helpers'
+
+include Capistrano3::Unicorn::Helpers
+
 namespace :load do
   task :defaults do
     set :unicorn_pid, -> { File.join(current_path, "tmp", "pids", "unicorn.pid") }
@@ -7,10 +11,22 @@ namespace :load do
     set :unicorn_options, -> { "" }
     set :unicorn_rack_env, -> { fetch(:rails_env) == "development" ? "development" : "deployment" }
     set :unicorn_bundle_gemfile, -> { File.join(current_path, "Gemfile") }
+    set :unicorn_worker_processes, 3
+    set :unicorn_timeout, 20
+    set :unicorn_listen, 8080
   end
 end
 
 namespace :unicorn do
+  desc "Setup Unicorn"
+  task :setup do
+    on roles(fetch(:unicorn_roles)) do
+      next if file_exists? fetch(:unicorn_config_path)
+      execute :mkdir, '-pv', File.dirname(fetch(:unicorn_config_path))
+      upload! template('unicorn.rb.erb'), fetch(:unicorn_config_path)
+    end
+  end
+
   desc "Start Unicorn"
   task :start do
     on roles(fetch(:unicorn_roles)) do
