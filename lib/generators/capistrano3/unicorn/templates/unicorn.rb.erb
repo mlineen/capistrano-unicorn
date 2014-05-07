@@ -4,8 +4,8 @@ timeout <%= fetch(:unicorn_timeout) %>
 listen <%= fetch(:unicorn_listen) %>
 working_directory <%= current_path %>
 pid <%= fetch(:unicorn_pid) %>
-stderr_path "#{current_path}/log/unicorn.stderr.log"
-stdout_path "#{current_path}/current/log/unicorn.stdout.log"
+stderr_path "<%= current_path %>/log/unicorn.stderr.log"
+stdout_path "<%= current_path %>/current/log/unicorn.stdout.log"
 
 before_fork do |server, worker|
     ActiveRecord::Base.connection.disconnect! if defined?(ActiveRecord::Base)
