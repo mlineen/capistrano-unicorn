@@ -12,7 +12,7 @@ end
 
 namespace :unicorn do
   desc "Start Unicorn"
-  task :start do
+  task :start => "deploy:set_rails_env" do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
         if test("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}")
