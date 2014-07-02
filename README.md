@@ -26,7 +26,7 @@ You can override the defaults by `set :unicorn_example, value` in the `config/de
 
 - `:unicorn_restart_sleep_time`
 
-    When performing zero-downtime deployment via the `unicorn:restart` task, send the USR2 signal, sleep for this many seconds (defaults to 3), then send the QUIT signal
+    When performing zero-downtime deployment via the `unicorn:legacy_restart` task, send the USR2 signal, sleep for this many seconds (defaults to 3), then send the QUIT signal
 
 - `:unicorn_roles`
 
@@ -62,7 +62,7 @@ require 'capistrano3/unicorn'
 
 Invoke Unicorn from your `config/deploy.rb` or `config/deploy/ENVIRONMENT.rb`:
 
-If `preload_app:true` use:
+**Recommended**: If `preload_app:true` and there is a `before_fork` block which manages the old unicorn process (see [example unicorn config](https://github.com/tablexi/capistrano3-unicorn/examples/config/unicorn.rb)) use the `unicorn:restart` task:
 
 ```ruby
 after 'deploy:publishing', 'deploy:restart'
@@ -73,7 +73,18 @@ namespace :deploy do
 end
 ```
 
-Otherwise use:
+With `preload_app:true` and using capistrano to manage the old unicorn process use the `unicorn:legacy_restart` task:
+
+```ruby
+after 'deploy:publishing', 'deploy:restart'
+namespace :deploy do
+  task :restart do
+    invoke 'unicorn:legacy_restart'
+  end
+end
+```
+
+Without `preload_app:true` use the `unicorn:reload` task:
 
 ```ruby
 after 'deploy:publishing', 'deploy:restart'

@@ -63,18 +63,31 @@ namespace :unicorn do
   end
 
   desc "Restart Unicorn (USR2 + QUIT); use this when preload_app: true"
-  task :restart do
-    invoke "unicorn:start"
+  task :legacy_restart do
+    invoke "unicorn:restart"
     on roles(fetch(:unicorn_roles)) do
       within current_path do
-        info "unicorn restarting..."
-        execute :kill, "-s USR2", pid
         execute :sleep, fetch(:unicorn_restart_sleep_time)
         if test("[ -e #{fetch(:unicorn_pid)}.oldbin ]")
           execute :kill, "-s QUIT", pid_oldbin
         end
       end
     end
+  end
+
+  desc "Restart Unicorn (USR2); use this when before_fork manages the old pid and preload_app: true"
+  task :restart do
+    invoke "unicorn:start"
+    on roles(fetch(:unicorn_roles)) do
+      within current_path do
+        info "unicorn restarting..."
+        execute :kill, "-s USR2", pid
+      end
+    end
+  end
+
+  task :duplicate do
+    invoke "unicorn:restart"
   end
 
   desc "Add a worker (TTIN)"
