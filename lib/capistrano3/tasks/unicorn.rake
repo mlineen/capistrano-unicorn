@@ -11,7 +11,7 @@ namespace :load do
     set :unicorn_restart_sleep_time, 3
     set :unicorn_roles, -> { :app }
     set :unicorn_options, -> { "" }
-    set :unicorn_rack_env, -> { fetch(:rails_env) == "development" ? "development" : "deployment" }
+    set :unicorn_rails_env, -> { fetch(:rails_env) }
     set :unicorn_bundle_gemfile, -> { File.join(current_path, "Gemfile") }
   end
 end
@@ -25,7 +25,7 @@ namespace :unicorn do
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env), bundle_gemfile: fetch(:unicorn_bundle_gemfile) do
-            execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
+            execute :bundle, "exec unicorn_rails", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rails_env), "-D", fetch(:unicorn_options)
           end
         end
       end
