@@ -1,6 +1,7 @@
 namespace :load do
   task :defaults do
     set :unicorn_pid, -> { File.join(current_path, "tmp", "pids", "unicorn.pid") }
+    set :unicorn_bin, -> { "unicorn" }
     set :unicorn_config_path, -> { File.join(current_path, "config", "unicorn", "#{fetch(:rails_env)}.rb") }
     set :unicorn_restart_sleep_time, 3
     set :unicorn_roles, -> { :app }
@@ -19,7 +20,7 @@ namespace :unicorn do
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env), bundle_gemfile: fetch(:unicorn_bundle_gemfile) do
-            execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
+            execute :bundle, "exec #{fetch(:unicorn_bin)}", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
           end
         end
       end
