@@ -1,6 +1,6 @@
 namespace :load do
   task :defaults do
-    set :unicorn_command, 'bundle exec unicorn'
+    set :unicorn_command, -> { [:bundle, :exec, :unicorn] }
     set :unicorn_pid, -> { current_path.join('tmp', 'pids', 'unicorn.pid') }
     set :unicorn_config_path, -> do
       unicorn_env_path = current_path.join('config', 'unicorn', "#{fetch(:rails_env)}.rb")
@@ -26,7 +26,7 @@ namespace :unicorn do
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env) do
-            execute fetch(:unicorn_command), '-c', fetch(:unicorn_config_path), '-E', fetch(:unicorn_rack_env), '-D', fetch(:unicorn_options)
+            execute *fetch(:unicorn_command), '-c', fetch(:unicorn_config_path), '-E', fetch(:unicorn_rack_env), '-D', fetch(:unicorn_options)
           end
         end
       end
