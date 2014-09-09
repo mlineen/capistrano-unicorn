@@ -17,8 +17,10 @@ namespace :unicorn do
         if test("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}")
           info "unicorn is running..."
         else
-          with rails_env: fetch(:rails_env) do
-            execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
+          with rails_env: fetch(:rails_env),
+               bundle_gemfile: current_path.join("Gemfile") \
+          do
+            execute :bundle, "exec", "unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
           end
         end
       end
