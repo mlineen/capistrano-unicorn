@@ -18,7 +18,7 @@ namespace :unicorn do
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env) do
-            execute "if [[ ! -e #{File.join(current_path, 'tmp', 'pids')} ]]; mkdir -p #{File.join(current_path, 'tmp', 'pids')}; fi"
+            execute "if [[ ! -e #{File.join(current_path, 'tmp', 'pids')} ]]; then mkdir -p #{File.join(current_path, 'tmp', 'pids')}; fi"
             execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
           end
         end
