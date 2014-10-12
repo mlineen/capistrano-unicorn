@@ -14,7 +14,7 @@ namespace :unicorn do
   task :start do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
-        if test("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}")
+        if test("[ -e #{fetch(:unicorn_pid)} ] && kill -9 #{pid}")
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env) do
@@ -30,7 +30,7 @@ namespace :unicorn do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
         if test("[ -e #{fetch(:unicorn_pid)} ]")
-          if test("kill -0 #{pid}")
+          if test("kill -9 #{pid}")
             info "stopping unicorn..."
             execute :kill, "-s QUIT", pid
           else
@@ -55,13 +55,13 @@ namespace :unicorn do
     end
   end
 
-  desc "Restart Unicorn (QUIT); use this when preload_app: true"
+  desc "Restart Unicorn (USR2); use this when preload_app: true"
   task :restart do
     invoke "unicorn:start"
     on roles(fetch(:unicorn_roles)) do
       within current_path do
         info "unicorn restarting..."
-        execute :kill, "-9", pid
+        execute :kill, "-s USR2", pid
       end
     end
   end
