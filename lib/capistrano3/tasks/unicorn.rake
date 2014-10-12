@@ -106,9 +106,9 @@ namespace :unicorn do
 end
 
 def pid
-  fetch(:unicorn_pid)
+  "`cat #{fetch(:unicorn_pid)}`"
 end
 
 def pid_oldbin
-  "#{fetch(:unicorn_pid)}.oldbin"
+  "`cat #{fetch(:unicorn_pid)}.oldbin`"
 end
