@@ -55,13 +55,13 @@ namespace :unicorn do
     end
   end
 
-  desc "Restart Unicorn (USR2); use this when preload_app: true"
+  desc "Restart Unicorn (QUIT); use this when preload_app: true"
   task :restart do
     invoke "unicorn:start"
     on roles(fetch(:unicorn_roles)) do
       within current_path do
         info "unicorn restarting..."
-        execute :kill, "-s USR2", pid
+        execute :kill, "-s QUIT", pid
       end
     end
   end
