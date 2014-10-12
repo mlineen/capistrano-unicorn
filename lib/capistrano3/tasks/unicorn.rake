@@ -61,7 +61,7 @@ namespace :unicorn do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
         info "unicorn restarting..."
-        execute :kill, "-s QUIT", pid
+        execute :kill, "-9", pid
       end
     end
   end
