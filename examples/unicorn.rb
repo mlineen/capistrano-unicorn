@@ -1,7 +1,6 @@
 # paths
-app_path = "/home/example/www.example.com"
-working_directory "#{app_path}/current"
-pid               "#{app_path}/current/tmp/pids/unicorn.pid"
+working_directory ENV['PWD']
+pid               "tmp/pids/unicorn.pid"
 
 # listen
 listen "/tmp/unicorn-www.example.com.socket", :backlog => 64
@@ -15,7 +14,7 @@ worker_processes 3
 
 # use correct Gemfile on restarts
 before_exec do |server|
-  ENV['BUNDLE_GEMFILE'] = "#{app_path}/current/Gemfile"
+  ENV['BUNDLE_GEMFILE'] = File.join(ENV['PWD'], "Gemfile")
 end
 
 # preload
