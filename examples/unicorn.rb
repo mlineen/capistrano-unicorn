@@ -1,5 +1,6 @@
-# paths
 app_path = "/home/example/www.example.com"
+
+# paths
 working_directory "#{app_path}/current"
 pid               "#{app_path}/current/tmp/pids/unicorn.pid"
 
