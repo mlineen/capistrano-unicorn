@@ -2,7 +2,7 @@ app_dir = "var/www/example/www.example.com"
 
 working_directory "#{app_dir}/current"
 
-pid               "#{app_dir}/current/tmp/pids/unicorn.pid"
+pid "#{app_dir}/current/tmp/pids/unicorn.pid"
 
 listen "#{app_dir}/current/tmp/sockets/unicorn-www.example.com.socket", :backlog => 64
 
