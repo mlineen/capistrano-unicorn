@@ -1,4 +1,4 @@
-app_dir = "/home/example/www.example.com"
+app_dir = "var/www/example/www.example.com"
 
 working_directory "#{app_dir}/current"
 
