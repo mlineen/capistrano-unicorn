@@ -1,26 +1,23 @@
-app_path = "/home/example/www.example.com"
+app_dir = "/home/example/www.example.com"
 
-# paths
-working_directory "#{app_path}/current"
-pid               "#{app_path}/current/tmp/pids/unicorn.pid"
+working_directory "#{app_dir}/current"
 
-# listen
-listen "#{app_path}/current/tmp/unicorn-www.example.com.socket", :backlog => 64
+pid               "#{app_dir}/current/tmp/pids/unicorn.pid"
+
+listen "#{app_dir}/current/tmp/sockets/unicorn-www.example.com.socket", :backlog => 64
+
+worker_processes 3
+
+preload_app true
 
 # logging
-stderr_path "log/unicorn.stderr.log"
-stdout_path "log/unicorn.stdout.log"
-
-# workers
-worker_processes 3
+stderr_path "#{app_dir}/log/unicorn.stderr.log"
+stdout_path "#{app_dir}/log/unicorn.stdout.log"
 
 # use correct Gemfile on restarts
 before_exec do |server|
-  ENV['BUNDLE_GEMFILE'] = "#{app_path}/current/Gemfile"
+  ENV['BUNDLE_GEMFILE'] = "#{app_dir}/current/Gemfile"
 end
-
-# preload
-preload_app true
 
 before_fork do |server, worker|
   # the following is highly recomended for Rails + "preload_app true"
