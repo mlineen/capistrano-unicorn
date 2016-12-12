@@ -14,10 +14,11 @@ namespace :unicorn do
   task :start do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
-        if test("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}")
+        if test("[ -e #{fetch(:unicorn_pid)} ] && kill -9 #{pid}")
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env) do
+            # execute "if [[ ! -e #{File.join(current_path, 'tmp', 'pids')} ]]; then mkdir -p #{File.join(current_path, 'tmp', 'pids')}; fi"
             execute :bundle, "exec unicorn", "-c", fetch(:unicorn_config_path), "-E", fetch(:unicorn_rack_env), "-D", fetch(:unicorn_options)
           end
         end
@@ -30,7 +31,7 @@ namespace :unicorn do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
         if test("[ -e #{fetch(:unicorn_pid)} ]")
-          if test("kill -0 #{pid}")
+          if test("kill -9 #{pid}")
             info "stopping unicorn..."
             execute :kill, "-s QUIT", pid
           else
