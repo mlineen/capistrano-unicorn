@@ -14,7 +14,7 @@ namespace :unicorn do
   task :start do
     on roles(fetch(:unicorn_roles)) do
       within current_path do
-        if test("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}")
+        if test(*("[ -e #{fetch(:unicorn_pid)} ] && kill -0 #{pid}").split(' '))
           info "unicorn is running..."
         else
           with rails_env: fetch(:rails_env) do
