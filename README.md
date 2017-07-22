@@ -64,7 +64,7 @@ require 'capistrano3/unicorn'
 
 Invoke Unicorn from your `config/deploy.rb` or `config/deploy/ENVIRONMENT.rb`:
 
-If `preload_app:true` use:
+If `preload_app:false` use:
 
 ```ruby
 after 'deploy:publishing', 'deploy:restart'
